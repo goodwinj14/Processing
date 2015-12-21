@@ -1,0 +1,127 @@
+// Here we will learn about arrays and the "for" loop
+// this is a float ARRAY variable type
+// it can hold many values in a list
+// these arrays will store the x and y values of objects
+float[] x;  // x value of the center of the ellipse
+float[] y;  // y value of the center of the ellipse
+float wid[];  // width of the ellipses 
+float ht[];  // height of the ellipses
+float dx[];  // x speed of ellipses
+float dy[]; // y speed of ellipses
+color myColor[]; 
+boolean running = false;
+int sizeOfArray = 2;
+int level = 1;
+int test =0;
+int score = 0; //The Number of ellipses stopped
+void setup() {
+  size (800, 600);
+  // tell Processing how many values you want to store
+  // in each array, in this example we want 4 sets of 
+  // x and y locations for our ellipses
+  x = new float[sizeOfArray];
+  y = new float[sizeOfArray];
+  dx = new float[sizeOfArray];
+  dy = new float[sizeOfArray];
+  myColor = new color[sizeOfArray];
+  //  Next we set the fixed initial values for our x and y locations
+  // and for the speeds we use a for loop to "populate" them
+  for (int i = 0; i < sizeOfArray; i++) {
+    x[i] = random(width);
+    y[i] = random(height);
+    dx[i] = random(-5, 5);
+    dy[i] = random(-5, 5);
+    myColor[i] = color(random(255),random(255),random(255));
+  }
+}
+void draw() {
+  
+  if (running) {  // only do this if the user presses "r"
+    test++;
+    System.out.println("Draw called"+ test);
+    background(127);
+    // draw all the ellipses by going through the array
+    // and getting each x and y value and drawing it
+    
+    for (int i = 0; i < x.length; i++) {
+      if (x[i] < 0) {
+        dx[i] = dx[i] * -1;
+      }
+      if (x[i] > width) {
+        dx[i] = dx[i] * -1;
+      }
+      if (y[i] < 0) {
+        dy[i] = dy[i] * -1;
+      }
+      if (y[i] > height) {
+        dy[i] = dy[i] * -1;
+      }
+      x[i] = x[i] + dx[i];
+      y[i] = y[i] + dy[i];
+      if (dist(mouseX,mouseY,x[i],y[i]) < 25) {
+        if(dx[i]!=0&&dx[i]!=0){
+          score = score+1;
+        }
+        dx[i] =0;
+        dy[i]=0;
+      }
+      fill(myColor[i]);
+      noStroke();
+      ellipse(x[i], y[i], 50, 50);  // use an ellipse width and height of 50
+    }
+    
+     /*
+      *This is where we restet everthing and make changes for level 2
+      */
+      if(score==sizeOfArray){
+          running = false;                         //Set running to false to puase the draw loop 
+          level++;                                 //Increase level by one.
+          sizeOfArray = sizeOfArray*level;         //Use the value of "level" to determin how many ellipese are draw
+          score = 0;                               //Set score back to zero so that this if statment isnt called again untill all the ellipses have been stopped again
+          
+          /*
+          *  Here is where we reintialize all the values. 
+          *  This is the same exact thing we did in the setup function.
+          *  But we our using a new value for "sizeOfArray" so more ellipses will be created
+          */
+          x = new float[sizeOfArray];
+          y = new float[sizeOfArray];
+          dx = new float[sizeOfArray];
+          dy = new float[sizeOfArray];
+          myColor = new color[sizeOfArray];
+          //  Next we set the fixed initial values for our x and y locations
+          // and for the speeds we use a for loop to "populate" them
+          for (int j = 0; j < sizeOfArray; j++) {
+            x[j] = random(width);
+            y[j] = random(height);
+            dx[j] = random(-5, 5);
+            dy[j] = random(-5, 5);
+            myColor[j] = color(random(255),random(255),random(255));
+          }
+          /*
+          *
+          */
+          
+          
+        clear();              //Clears all the ellipses frome the screen
+        background(255);      //Sets background color to white
+        
+        //-----------------------------------------------------------------//
+        //Here is where any code will go to be displayed after the level is over
+        //for example "press r to start level two
+        //-----------------------------------------------------------------//
+        textSize(32);
+        fill(0, 102, 153);
+        text("Press r to continue to level "+level, 10, 60);
+       
+        }
+  }
+}
+void keyPressed() {
+  if (key == 'r') {
+    running = true;
+  }
+  if (key == 's') {
+    running = false;
+  }
+}
